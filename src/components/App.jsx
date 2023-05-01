@@ -27,21 +27,23 @@ export const App = () => {
   const [isEmpty, setIsEmpty] = useState(false);
   const [error, setError] = useState('');
 
-  const dataToState = (query, page) => {
-    //async
+  async function dataToState(query, page) {
+    //
     //
     setIsLoading(true);
     try {
-      const data = ImageService.getImages(query, page); //await
+      const data = await ImageService.getImages(query, page); //await
 
       const { hits, total, totalHits } = data;
+      console.log(query, page);
+      console.log(data);
 
       if (!hits.length) {
         setIsEmpty(true);
         Notiflix.Notify.failure(`No photos at query "${query}"`);
         return;
       } else {
-        setPhotos(prevState => [...prevState.photos, ...hits]);
+        setPhotos(prevState => [...prevState, ...hits]);
         setShowLoadMore(page < Math.ceil(totalHits / 12));
       }
       setTotal(total);
@@ -55,7 +57,7 @@ export const App = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     dataToState(query, page);
@@ -89,18 +91,13 @@ export const App = () => {
   //setLargeImageURL(largeImageURL);
   const setLargeImageURLevt = largeImageURL => {
     setLargeImageURL(largeImageURL);
-  }; //setLargeImageURLevt
+  };
 
   return (
     <div style={appStyles}>
       <Searchbar onFormSubmit={onFormSubmit} />
 
-      <ImageGallery
-        photos={photos}
-        onClick={() => {
-          console.log('onvolia');
-        }}
-      />
+      <ImageGallery photos={photos} onClick={setLargeImageURLevt} />
       {showLoadMore && (
         <>
           <Button onLoadMore={onLoadMore} />
