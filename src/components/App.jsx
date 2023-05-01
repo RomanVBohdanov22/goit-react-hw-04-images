@@ -19,8 +19,8 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [photos, setPhotos] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [totalPhotos, setTotalPhotos] = useState(0);
+  //const [total, setTotal] = useState(0);
+  //const [totalPhotos, setTotalPhotos] = useState(0);
   const [largeImageURL, setLargeImageURL] = useState('');
   const [showLoadMore, setShowLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,8 +46,10 @@ export const App = () => {
         setPhotos(prevState => [...prevState, ...hits]);
         setShowLoadMore(page < Math.ceil(totalHits / 12));
       }
-      setTotal(total);
-      setTotalPhotos(totalHits);
+      //setTotal(total);
+      //setTotalPhotos(totalHits);
+      console.log(total, totalHits);
+
       Notiflix.Notify.success(
         `Located ${totalHits} photos at query "${query}"`
       );
@@ -75,8 +77,8 @@ export const App = () => {
     setQuery(query);
     setPage(1);
     setPhotos([]);
-    setTotal(0);
-    setTotalPhotos(0);
+    //setTotal(0);
+    //setTotalPhotos(0);
     setShowLoadMore(false);
     setIsLoading(false);
     setIsEmpty(false);
