@@ -93,6 +93,7 @@ export const App = () => {
   //setLargeImageURL(largeImageURL);
   const setLargeImageURLevt = largeImageURL => {
     setLargeImageURL(largeImageURL);
+    console.log(error + isEmpty);
   };
 
   return (
