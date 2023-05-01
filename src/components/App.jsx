@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Notiflix from 'notiflix';
 import Searchbar from './searchbar';
 import Button from './button';
@@ -15,104 +15,101 @@ const appStyles = {
   paddingBottom: '24px',
 };
 
-export class App extends Component {
-  state = {
-    query: '',
-    page: 1,
-    photos: [],
-    total: 0,
-    totalPhotos: 0,
-    largeImageURL: '',
-    showLoadMore: false,
-    isLoading: false,
-    isEmpty: false,
-    error: '',
-  };
+export const App = () => {
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [photos, setPhotos] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [totalPhotos, setTotalPhotos] = useState(0);
+  const [largeImageURL, setLargeImageURL] = useState('');
+  const [showLoadMore, setShowLoadMore] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [error, setError] = useState('');
 
-  async dataToState(query, page) {
-    this.setState({ isLoading: true });
+  const dataToState = (query, page) => {
+    //async
+    //
+    setIsLoading(true);
     try {
-      const data = await ImageService.getImages(query, page); //"flower", 2
+      const data = ImageService.getImages(query, page); //await
 
       const { hits, total, totalHits } = data;
 
       if (!hits.length) {
-        this.setState({
-          isEmpty: true,
-        });
+        setIsEmpty(true);
         Notiflix.Notify.failure(`No photos at query "${query}"`);
         return;
       } else {
-        this.setState(prevState => ({
-          photos: [...prevState.photos, ...hits],
-          showLoadMore: page < Math.ceil(totalHits / 12),
-        }));
+        setPhotos(prevState => [...prevState.photos, ...hits]);
+        setShowLoadMore(page < Math.ceil(totalHits / 12));
       }
-      this.setState({
-        total: total,
-        totalPhotos: totalHits,
-      });
+      setTotal(total);
+      setTotalPhotos(totalHits);
       Notiflix.Notify.success(
         `Located ${totalHits} photos at query "${query}"`
       );
     } catch (error) {
+      setError(error.message);
       Notiflix.Notify.failure(error.message);
-      this.setState({ error: error.message });
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
-  }
+  };
 
-  async componentDidUpdate(prevProps, prevState) {
+  useEffect(() => {
+    dataToState(query, page);
+  }, [query, page]);
+  /*
+  async const componentDidUpdate = (prevProps, prevState) => {
     const { query, page } = this.state;
 
     if (prevState.query !== query || prevState.page !== page) {
       await this.dataToState(query, page);
     }
-  }
+  }*/
 
-  onFormSubmit = ({ query }) => {
-    this.setState({
-      query: query,
-      page: 1,
-      photos: [],
-      total: 0,
-      totalPhotos: 0,
-      showLoadMore: false,
-      isLoading: false, //
-      isEmpty: false,
-      error: '',
-    });
+  const onFormSubmit = ({ query }) => {
+    setQuery(query);
+    setPage(1);
+    setPhotos([]);
+    setTotal(0);
+    setTotalPhotos(0);
+    setShowLoadMore(false);
+    setIsLoading(false);
+    setIsEmpty(false);
+    setError('');
   };
 
-  onLoadMore = () => {
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+  const onLoadMore = () => {
+    setPage(prevState => prevState.page + 1);
+    //this.setState(prevState => ({ page: prevState.page + 1 }));
   };
-  setLargeImageURL = largeImageURL => {
-    this.setState({ largeImageURL });
-  };
-  render() {
-    return (
-      <div style={appStyles}>
-        <Searchbar onFormSubmit={this.onFormSubmit} />
 
-        <ImageGallery
-          photos={this.state.photos}
-          onClick={this.setLargeImageURL}
-        />
-        {this.state.showLoadMore && (
-          <>
-            <Button onLoadMore={this.onLoadMore} />
-          </>
-        )}
-        {this.state.largeImageURL && (
-          <Modal
-            largeImageURL={this.state.largeImageURL}
-            onClick={this.setLargeImageURL}
-          />
-        )}
-        {this.state.isLoading && <Loader />}
-      </div>
-    );
-  }
-}
+  //setLargeImageURL(largeImageURL);
+  const setLargeImageURLevt = largeImageURL => {
+    setLargeImageURL(largeImageURL);
+  }; //setLargeImageURLevt
+
+  return (
+    <div style={appStyles}>
+      <Searchbar onFormSubmit={onFormSubmit} />
+
+      <ImageGallery
+        photos={photos}
+        onClick={() => {
+          console.log('onvolia');
+        }}
+      />
+      {showLoadMore && (
+        <>
+          <Button onLoadMore={onLoadMore} />
+        </>
+      )}
+      {largeImageURL && (
+        <Modal largeImageURL={largeImageURL} onClick={setLargeImageURL} />
+      )}
+      {isLoading && <Loader />}
+    </div>
+  );
+};
