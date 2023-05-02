@@ -26,34 +26,39 @@ export const App = () => {
   const [isEmpty, setIsEmpty] = useState(false);
   const [error, setError] = useState('');
 
-  async function dataToState(query, page) {
-    setIsLoading(true);
-    try {
-      const { hits, totalHits } = await ImageService.getImages(query, page);
-      if (!hits.length) {
-        setIsEmpty(true);
-        Notiflix.Notify.failure(`No photos at query "${query}"`);
-        return;
-      }
-      setPhotos(prevState => [...prevState, ...hits]);
-      setTotalHits(totalHits);
-      setShowLoadMore(page < Math.ceil(totalHits / 12));
-      if (showLoadMore) setPage(prevState => prevState.page + 1);
-      Notiflix.Notify.success(
-        `Located ${totalHits} photos at query "${query}"`
-      );
-    } catch (error) {
-      setError(error.message);
-      Notiflix.Notify.failure(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
+  /*
   useEffect(() => {
     if (!query) return;
     return () => dataToState(query, page);
-  }, [query, page, dataToState]);
+  }, [query, page, dataToState]);*/
+
+  useEffect(() => {
+    if (!query) return;
+    async function dataToState(query, page) {
+      setIsLoading(true);
+      try {
+        const { hits, totalHits } = await ImageService.getImages(query, page);
+        if (!hits.length) {
+          setIsEmpty(true);
+          Notiflix.Notify.failure(`No photos at query "${query}"`);
+          return;
+        }
+        setPhotos(prevState => [...prevState, ...hits]);
+        setTotalHits(totalHits);
+        setShowLoadMore(page < Math.ceil(totalHits / 12));
+        if (showLoadMore) setPage(prevState => prevState.page + 1);
+        Notiflix.Notify.success(
+          `Located ${totalHits} photos at query "${query}"`
+        );
+      } catch (error) {
+        setError(error.message);
+        Notiflix.Notify.failure(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    dataToState(query, page);
+  }, [query, page]);
 
   const onFormSubmit = ({ query }) => {
     setQuery(query);
