@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import '../searchbar/Searchbar.css';
 import { useState } from 'react';
+import { Notify } from 'notiflix';
 
 const Searchbar = ({ onFormSubmit }) => {
   const [query, setQuery] = useState('');
@@ -12,6 +13,9 @@ const Searchbar = ({ onFormSubmit }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
+    if (!query) {
+      Notify.warning('The query line is empty!');
+    }
     onFormSubmit({ query });
     setQuery('');
   };

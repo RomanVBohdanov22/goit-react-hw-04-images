@@ -11,17 +11,18 @@ export const Modal = ({ onClick, largeImageURL }) => {
       onClick('');
     }
   };
-  const handleKeyDown = event => {
-    if (event.code === 'Escape') {
-      onClick('');
-    }
-  };
+
   useEffect(() => {
+    const handleKeyDown = event => {
+      if (event.code === 'Escape') {
+        onClick('');
+      }
+    };
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  });
+  }, [onClick]);
 
   return createPortal(
     <div className="Overlay" onClick={handleOverlayClick}>
