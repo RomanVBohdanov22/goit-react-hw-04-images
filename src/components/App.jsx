@@ -26,12 +26,6 @@ export const App = () => {
   const [isEmpty, setIsEmpty] = useState(false);
   const [error, setError] = useState('');
 
-  /*
-  useEffect(() => {
-    if (!query) return;
-    return () => dataToState(query, page);
-  }, [query, page, dataToState]);*/
-
   useEffect(() => {
     if (!query) return;
     async function dataToState(query, page) {
