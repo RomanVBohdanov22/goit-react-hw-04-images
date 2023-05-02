@@ -42,18 +42,3 @@ export default Searchbar;
 Searchbar.propTypes = {
   onFormSubmit: PropTypes.func.isRequired,
 };
-//Searchbar
-//export const App = () =>
-/*
-  static propTypes = {
-    onFormSubmit: PropTypes.func.isRequired,
-  };
- */
-/*
-ImageGallery.propTypes = {
-  photos: PropTypes.arrayOf(
-    PropTypes.shape({ id: PropTypes.number.isRequired })
-  ).isRequired,
-  onClick: PropTypes.func.isRequired,
-};
-*/
