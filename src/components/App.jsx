@@ -33,13 +33,12 @@ export const App = () => {
         setIsEmpty(true);
         Notiflix.Notify.failure(`No photos at query "${query}"`);
         return;
-      } else {
-        setPhotos(prevState => [...prevState, ...hits]);
-        setShowLoadMore(page < Math.ceil(totalHits / 12));
-        Notiflix.Notify.success(
-          `Located ${totalHits} photos at query "${query}"`
-        );
       }
+      setPhotos(prevState => [...prevState, ...hits]);
+      setShowLoadMore(page < Math.ceil(totalHits / 12));
+      Notiflix.Notify.success(
+        `Located ${totalHits} photos at query "${query}"`
+      );
     } catch (error) {
       setError(error.message);
       Notiflix.Notify.failure(error.message);
@@ -49,16 +48,9 @@ export const App = () => {
   }
 
   useEffect(() => {
+    if (!query) return;
     dataToState(query, page);
   }, [query, page]); // dataToState
-  /*
-  async const componentDidUpdate = (prevProps, prevState) => {
-    const { query, page } = this.state;
-
-    if (prevState.query !== query || prevState.page !== page) {
-      await this.dataToState(query, page);
-    }
-  }*/
 
   const onFormSubmit = ({ query }) => {
     setQuery(query);
@@ -76,7 +68,8 @@ export const App = () => {
 
   const setLargeImageURLevt = largeImageURL => {
     setLargeImageURL(largeImageURL);
-    console.log(error + isEmpty);
+    if (error) return;
+    if (isEmpty) return;
   };
 
   return (
