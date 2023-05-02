@@ -21,7 +21,7 @@ export const Modal = ({ onClick, largeImageURL }) => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  });
 
   return createPortal(
     <div className="Overlay" onClick={handleOverlayClick}>

@@ -68,8 +68,11 @@ export const App = () => {
 
   const setLargeImageURLevt = largeImageURL => {
     setLargeImageURL(largeImageURL);
-    if (error) return;
-    if (isEmpty) return;
+    if (error) {
+      Notiflix.Notify.failure(error);
+      return;
+    }
+    if (isEmpty) Notiflix.Notify.failure(error);
   };
 
   return (
