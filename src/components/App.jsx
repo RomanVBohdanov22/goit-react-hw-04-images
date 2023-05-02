@@ -19,6 +19,7 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [photos, setPhotos] = useState([]);
+  const [totalHits, setTotalHits] = useState(0);
   const [largeImageURL, setLargeImageURL] = useState('');
   const [showLoadMore, setShowLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +36,9 @@ export const App = () => {
         return;
       }
       setPhotos(prevState => [...prevState, ...hits]);
+      setTotalHits(totalHits);
       setShowLoadMore(page < Math.ceil(totalHits / 12));
+      if (showLoadMore) setPage(prevState => prevState.page + 1);
       Notiflix.Notify.success(
         `Located ${totalHits} photos at query "${query}"`
       );
@@ -50,7 +53,7 @@ export const App = () => {
   useEffect(() => {
     if (!query) return;
     dataToState(query, page);
-  }, [query, page]); // dataToState
+  }, [query, page]);
 
   const onFormSubmit = ({ query }) => {
     setQuery(query);
@@ -64,6 +67,7 @@ export const App = () => {
 
   const onLoadMore = () => {
     setPage(prevState => prevState.page + 1);
+    setShowLoadMore(page < Math.ceil(totalHits / 12));
   };
 
   const setLargeImageURLevt = largeImageURL => {
