@@ -52,8 +52,8 @@ export const App = () => {
 
   useEffect(() => {
     if (!query) return;
-    dataToState(query, page);
-  }, [query, page]);
+    return () => dataToState(query, page);
+  }, [query, page, dataToState]);
 
   const onFormSubmit = ({ query }) => {
     setQuery(query);
@@ -67,7 +67,7 @@ export const App = () => {
 
   const onLoadMore = () => {
     setPage(prevState => prevState.page + 1);
-    setShowLoadMore(page < Math.ceil(totalHits / 12));
+    //setShowLoadMore(page < Math.ceil(totalHits / 12));
   };
 
   const setLargeImageURLevt = largeImageURL => {
