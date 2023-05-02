@@ -72,7 +72,6 @@ export const App = () => {
 
   const onLoadMore = () => {
     setPage(prevState => prevState.page + 1);
-    //setShowLoadMore(page < Math.ceil(totalHits / 12));
   };
 
   const setLargeImageURLevt = largeImageURL => {
