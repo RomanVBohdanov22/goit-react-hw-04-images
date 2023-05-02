@@ -44,9 +44,9 @@ export const App = () => {
           return;
         }
         setPhotos(prevState => [...prevState, ...hits]);
-        //setTotalHits(totalHits);
+
         setShowLoadMore(page < Math.ceil(totalHits / 12));
-        if (showLoadMore) setPage(prevState => prevState.page + 1);
+
         Notiflix.Notify.success(
           `Located ${totalHits} photos at query "${query}"`
         );
