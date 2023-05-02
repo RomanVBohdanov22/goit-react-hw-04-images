@@ -15,6 +15,7 @@ const Searchbar = ({ onFormSubmit }) => {
     event.preventDefault();
     if (!query) {
       Notify.warning('The query line is empty!');
+      return;
     }
     onFormSubmit({ query });
     setQuery('');
