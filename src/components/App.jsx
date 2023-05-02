@@ -19,7 +19,7 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [photos, setPhotos] = useState([]);
-  const [totalHits, setTotalHits] = useState(0);
+  //const [totalHits, setTotalHits] = useState(0);
   const [largeImageURL, setLargeImageURL] = useState('');
   const [showLoadMore, setShowLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ export const App = () => {
           return;
         }
         setPhotos(prevState => [...prevState, ...hits]);
-        setTotalHits(totalHits);
+        //setTotalHits(totalHits);
         setShowLoadMore(page < Math.ceil(totalHits / 12));
         if (showLoadMore) setPage(prevState => prevState.page + 1);
         Notiflix.Notify.success(
