@@ -19,8 +19,6 @@ export const App = () => {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [photos, setPhotos] = useState([]);
-  //const [total, setTotal] = useState(0);
-  //const [totalPhotos, setTotalPhotos] = useState(0);
   const [largeImageURL, setLargeImageURL] = useState('');
   const [showLoadMore, setShowLoadMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,16 +26,9 @@ export const App = () => {
   const [error, setError] = useState('');
 
   async function dataToState(query, page) {
-    //
-    //
     setIsLoading(true);
     try {
-      const data = await ImageService.getImages(query, page); //await
-
-      const { hits, total, totalHits } = data;
-      console.log(query, page);
-      console.log(data);
-
+      const { hits, totalHits } = await ImageService.getImages(query, page);
       if (!hits.length) {
         setIsEmpty(true);
         Notiflix.Notify.failure(`No photos at query "${query}"`);
@@ -45,14 +36,10 @@ export const App = () => {
       } else {
         setPhotos(prevState => [...prevState, ...hits]);
         setShowLoadMore(page < Math.ceil(totalHits / 12));
+        Notiflix.Notify.success(
+          `Located ${totalHits} photos at query "${query}"`
+        );
       }
-      //setTotal(total);
-      //setTotalPhotos(totalHits);
-      console.log(total, totalHits);
-
-      Notiflix.Notify.success(
-        `Located ${totalHits} photos at query "${query}"`
-      );
     } catch (error) {
       setError(error.message);
       Notiflix.Notify.failure(error.message);
@@ -63,7 +50,7 @@ export const App = () => {
 
   useEffect(() => {
     dataToState(query, page);
-  }, [query, page]);
+  }, [query, page]); // dataToState
   /*
   async const componentDidUpdate = (prevProps, prevState) => {
     const { query, page } = this.state;
@@ -77,8 +64,6 @@ export const App = () => {
     setQuery(query);
     setPage(1);
     setPhotos([]);
-    //setTotal(0);
-    //setTotalPhotos(0);
     setShowLoadMore(false);
     setIsLoading(false);
     setIsEmpty(false);
@@ -87,10 +72,8 @@ export const App = () => {
 
   const onLoadMore = () => {
     setPage(prevState => prevState.page + 1);
-    //this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
-  //setLargeImageURL(largeImageURL);
   const setLargeImageURLevt = largeImageURL => {
     setLargeImageURL(largeImageURL);
     console.log(error + isEmpty);
